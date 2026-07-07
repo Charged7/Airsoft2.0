@@ -29,7 +29,6 @@ class Product(models.Model):
     extra_gear = models.JSONField(default=list)
     budget_tier = models.CharField(max_length=10, choices=BUDGET_CHOICES)
     image = models.ImageField(upload_to="products/", blank=True)
-    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -1,0 +1,58 @@
+### =========================================
+### QUIZ SUBMIT - NOVICE
+### =========================================
+
+POST http://127.0.0.1:8000/api/v1/quiz/submit/
+Content-Type: application/json
+
+{
+  "experience": "novice",
+  "product_goal": "primary",
+  "play_style": "field",
+  "play_role": "assault",
+  "priority": "reliability",
+  "budget": "medium",
+  "maintenance": "no",
+  "tuning": "no",
+  "weight": "important",
+  "weather": "mixed",
+  "extra_gear": "minimal",
+  "simple_start": "yes"
+}
+
+###
+
+### =========================================
+### QUIZ SUBMIT - MILSIM
+### =========================================
+
+POST http://127.0.0.1:8000/api/v1/quiz/submit/
+Content-Type: application/json
+
+{
+  "experience": "few_games",
+  "product_goal": "primary",
+  "play_style": "milsim",
+  "play_role": "assault",
+  "priority": "realism",
+  "budget": "high",
+  "maintenance": "yes",
+  "tuning": "yes",
+  "weight": "not_important",
+  "weather": "warm",
+  "extra_gear": "ready",
+  "simple_start": "no"
+}
+
+###
+
+#TODO: Add more quiz submission examples for different scenarios (e.g., intermediate, expert, etc.)
+
+### =========================================
+### QUIZ SUBMISSION DETAILS
+### Замінити ID після створення запису
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/submissions/1/
+
+###

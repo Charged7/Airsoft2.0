@@ -29,7 +29,6 @@ class Command(BaseCommand):
                     "not_for": item.get("not_for", []),
                     "extra_gear": item.get("extra_gear", []),
                     "budget_tier": item["budget_tier"],
-                    "is_active": True,
                 },
             )
 

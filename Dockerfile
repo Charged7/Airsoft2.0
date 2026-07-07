@@ -1,14 +1,22 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
 WORKDIR /app
 
-COPY requirements.txt .
+RUN pip install --no-cache-dir uv
 
-RUN pip install -r requirements.txt
+COPY pyproject.toml uv.lock ./
+
+RUN uv sync --locked --no-dev --no-install-project
 
 COPY . .
 
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+ENV PATH="/app/.venv/bin:$PATH"
+
+RUN chmod +x scripts/render-start.sh
+
+CMD ["scripts/render-start.sh"]

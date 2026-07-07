@@ -1,0 +1,125 @@
+### =========================================
+### HEALTH CHECK
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/health/
+
+###
+
+### =========================================
+### QUIZ QUESTIONS
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/quiz/questions/
+
+###
+
+### =========================================
+### PRODUCTS LIST
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/
+
+###
+
+### =========================================
+### PRODUCTS BY TYPE
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/?type=AEG
+
+###
+
+### =========================================
+### PRODUCTS BY BUDGET
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/?budget=low
+
+###
+
+### =========================================
+### PRODUCTS BY ROLE
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/?role=cqb
+
+###
+
+### =========================================
+### PRODUCT DETAIL
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/ak-aeg/
+
+###
+
+### =========================================
+### FILTERS
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/meta/filters/
+
+###
+
+### =========================================
+### COMPARE 2 PRODUCTS
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/compare/?slugs=m4-aeg,ak-aeg
+
+###
+
+### =========================================
+### COMPARE 3 PRODUCTS
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/compare/?slugs=m4-aeg,hk416-aeg,scar-l-aeg
+
+###
+
+### =========================================
+### COMPARE CQB GUNS
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/compare/?slugs=mp5-aeg,p90-tr,arp9-aeg
+
+###
+
+### =========================================
+### COMPARE GBBR
+### =========================================
+
+GET http://127.0.0.1:8000/api/v1/products/compare/?slugs=mws-m4-gbbr,daniel-defense-mk18-gbbr,bcm-mcmr-gbbr
+
+###
+
+### PRODUCTS SEARCH
+
+GET http://127.0.0.1:8000/api/v1/products/?search=m4
+
+###
+
+### PRODUCTS ORDER BY NAME
+
+GET http://127.0.0.1:8000/api/v1/products/?ordering=name
+
+###
+
+### PRODUCTS ORDER DESC
+
+GET http://127.0.0.1:8000/api/v1/products/?ordering=-name
+
+###
+
+### FILTER COMBINATION
+
+GET http://127.0.0.1:8000/api/v1/products/?type=AEG&role=cqb
+
+###
+
+### FILTER + SEARCH
+
+GET http://127.0.0.1:8000/api/v1/products/?type=AEG&search=mp5
+
+###

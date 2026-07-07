@@ -1,11 +1,10 @@
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
 from picker.models import Product, QuizSubmission
-from picker.services.scoring import score_products
+from picker.services.scoring import MissingScoresError, score_products
 
 from .serializers import (
     ProductSerializer,
@@ -16,20 +15,19 @@ from ..data.quiz_questions import QUIZ_QUESTIONS
 
 class ProductListAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
+    allowed_orderings = {
+        "name",
+        "-name",
+        "type",
+        "-type",
+        "budget_tier",
+        "-budget_tier",
+        "created_at",
+        "-created_at",
+    }
 
     def get_queryset(self):
-        filter_backends = [
-            DjangoFilterBackend,
-        ]
-
-        filterset_fields = [
-            "type",
-            "budget_tier",
-        ]
-
-        queryset = Product.objects.filter(
-            is_active=True
-        )
+        queryset = Product.objects.all()
 
         product_type = self.request.query_params.get("type")
         role = self.request.query_params.get("role")
@@ -43,23 +41,27 @@ class ProductListAPIView(generics.ListAPIView):
         if budget:
             queryset = queryset.filter(budget_tier=budget)
 
-        if role:
-            queryset = queryset.filter(roles__contains=[role])
-
         if search:
             queryset = queryset.filter(
                 name__icontains=search
             )
 
-        if ordering:
+        if ordering in self.allowed_orderings:
             queryset = queryset.order_by(ordering)
+
+        if role:
+            queryset = [
+                product
+                for product in queryset
+                if role in (product.roles or [])
+            ]
 
         return queryset
 
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
-    queryset = Product.objects.filter(is_active=True)
+    queryset = Product.objects.all()
     lookup_field = "slug"
 
 
@@ -71,15 +73,22 @@ class QuizSubmitAPIView(APIView):
 
         answers = serializer.validated_data
 
-        products = Product.objects.filter(
-            is_active=True
-        )
+        products = Product.objects.all()
 
-        results = score_products(
-            products=products,
-            answers=answers,
-            top_n=3,
-        )
+        try:
+            results = score_products(
+                products=products,
+                answers=answers,
+                top_n=3,
+            )
+        except MissingScoresError as exc:
+            return Response(
+                {
+                    "detail": "Product scoring data is incomplete.",
+                    "error": str(exc),
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         response_results = []
 
@@ -161,6 +170,9 @@ class FiltersAPIView(APIView):
                     "forest",
                     "field",
                     "milsim",
+                    "assault",
+                    "sniper",
+                    "support",
                 ],
             }
         )
@@ -189,7 +201,6 @@ class CompareProductsAPIView(APIView):
 
         products = Product.objects.filter(
             slug__in=slugs,
-            is_active=True
         )
 
         serializer = ProductSerializer(
